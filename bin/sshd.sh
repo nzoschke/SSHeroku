@@ -2,7 +2,10 @@
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ETC_DIR=$(dirname $BIN_DIR)/etc
 
+whoami
+
 cat <<EOF >/tmp/sshd_config
+AllowUsers *
 Protocol 2
 Port ${PORT:-5000}
 AuthorizedKeysFile $ETC_DIR/ssh/authorized_keys

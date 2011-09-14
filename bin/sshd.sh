@@ -1,20 +1,26 @@
 #!/bin/bash
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
-ETC_DIR=$(dirname $BIN_DIR)/etc
+ETC_DIR=$(dirname $BIN_DIR)/etc/ssh
 
-whoami
+USER=$(whoami)
+HOST=$(/sbin/ifconfig eth0  | grep 'inet addr:' | cut -d: -f2 | awk '{print $1}')
+PORT=${PORT:-5000}
+(while true; do
+  echo ssh $USER@$HOST -p $PORT
+  sleep 600
+done) &
 
-cat <<EOF >/tmp/sshd_config
+cat <<EOF >$ETC_DIR/sshd_config
 AllowUsers *
 Protocol 2
-Port ${PORT:-5000}
-AuthorizedKeysFile $ETC_DIR/ssh/authorized_keys
+Port $PORT
+AuthorizedKeysFile $ETC_DIR/authorized_keys
 PasswordAuthentication no
 ChallengeResponseAuthentication no
 UsePAM no
 PermitRootLogin no
 LoginGraceTime 20
-HostKey $ETC_DIR/ssh/ssh_host_key
+HostKey $ETC_DIR/ssh_host_key
 UsePrivilegeSeparation no
 PermitUserEnvironment yes
 EOF

@@ -25,4 +25,4 @@ UsePrivilegeSeparation no
 PermitUserEnvironment yes
 EOF
 
-/usr/sbin/sshd -D -e -f /tmp/sshd_config
+/usr/sbin/sshd -D -e -f $ETC_DIR/sshd_config

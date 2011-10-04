@@ -17,7 +17,7 @@ heroku config:add             \
 git push heroku master
 
 ssh $(curl -s $APP.herokuapp.com) uname -a
-Linux 9e889cba-a41b-4497-b9bd-e394470714aa 2.6.32-316-ec2 #31-Ubuntu SMP Wed May 18 14:10:36 UTC 2011 x86_64 GNU/Linux
+Linux 9e889cba-a41b-4497-b9bd-e394470714aa 2.6.32-316-ec2 31-Ubuntu SMP Wed May 18 14:10:36 UTC 2011 x86_64 GNU/Linux
 
 ssh $(curl -s $APP.herokuapp.com) # gives an interactive shell!
 ```
@@ -25,9 +25,9 @@ ssh $(curl -s $APP.herokuapp.com) # gives an interactive shell!
 Background
 ----------
 
-SSHD on Heroku is achieved with the TCP router and the OpenSSH SSH daemon.
+SSHeroku is achieved with the TCP router and the OpenSSH SSH daemon.
 
-A simple Rack app uses the Heroku `ps`, `route`, and `log` APIs to create the `sshd` process, create and attach a TCP route to it, and read the unix username from the process logs. This is returned as an SSH connection string to the client.
+A simple Rack app uses the Heroku `ps`, `route`, and `log` APIs to create an `sshd` process, create and attach a TCP route to it, and read the unix username from the process logs. This is returned as an SSH connection string to the client for passing to the `ssh` command.
 
 The entire system is set to self-destruct when not used. The web app is a single idling dyno, and the sshd process will exit when it has no connections. This keeps dyno-hour usage to an absolute minimum.
 
@@ -36,12 +36,12 @@ Why?
 
 This tool allows a true bi-directional pipeline into a Heroku dyno. Example:
 
-    @@@ sh
-    tar -c . | ssh $(curl -s $APP.herokuapp.com) tar -xv
-    ./
-    ./.git/
-    ...
-    @@@
+```bash
+tar -c . | ssh $(curl -s $APP.herokuapp.com) tar -xv
+./
+./.git/
+...
+```
 
 Extra
 -----

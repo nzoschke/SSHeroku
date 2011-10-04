@@ -5,9 +5,13 @@ ETC_DIR=$(dirname $BIN_DIR)/etc/ssh
 USER=$(whoami)
 PORT=${PORT:-5000}
 
+touch /tmp/last
 (while true; do
   echo user=$USER
-  ps -f
+
+  touch -d '-1 minute' /tmp/limit
+  ps ax | grep sshd: && touch /tmp/last
+  [ /tmp/limit -nt /tmp/last ] && { echo "1 minute exceeded"; exit 1; }
   sleep 10
 done) &
 

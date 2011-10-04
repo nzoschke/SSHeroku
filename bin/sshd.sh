@@ -9,9 +9,9 @@ touch /tmp/last
 (while true; do
   echo user=$USER
 
-  touch -d '-1 minute' /tmp/limit
-  ps ax | grep sshd: && touch /tmp/last
-  [ /tmp/limit -nt /tmp/last ] && { echo "1 minute exceeded"; exit 1; }
+  touch -d '-20 seconds' /tmp/limit
+  ps ax | grep sshd: | grep -v grep && touch /tmp/last
+  [ /tmp/limit -nt /tmp/last ] && { echo "non-connect limit exceeded"; kill -9 1; }
   sleep 10
 done) &
 

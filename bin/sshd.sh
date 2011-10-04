@@ -12,16 +12,15 @@ prefer() { eval "${!#}() { $(which $* | head -1) \"\$@\"; }; declare -fx ${!#};"
 prefer gtouch touch
 
 # Monitor sshd for connections; self-destruct if none seen for 30s
-touch /tmp/seen
+touch /tmp/beat
 (while true; do
   PID=$(cat $PID_FILE)
-  CONNS=$(ps ax | grep -v grep | grep sshd | wc -l)
+  CONNS=$(ps ax | grep -v grep | grep sshd: | wc -l)
   echo user=$USER host=$HOST port=$PORT pid=$PID conns=$CONNS
 
+  [ $CONNS -gt 0 ] && touch /tmp/beat
   touch -d '-30 seconds' /tmp/timeout
-  ps ax | grep -v grep | grep -q sshd: && touch /tmp/seen
-
-  [ /tmp/seen -ot /tmp/timeout ] && {
+  [ /tmp/beat -ot /tmp/timeout ] && {
     echo "non-connect timeout exceeded";
     kill -9 $PID;
     exit 1

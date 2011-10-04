@@ -1,21 +1,26 @@
 #!/bin/bash
+
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ETC_DIR=$(dirname $BIN_DIR)/etc/ssh
 
-USER=$(whoami)
 PORT=${PORT:-5000}
 PID_FILE=$ETC_DIR/sshd.pid
 
-touch /tmp/last
+prefer() { eval "${!#}() { $(which $* | head -1) \"\$@\"; }; declare -fx ${!#};"; }
+prefer gtouch touch
+
+# Monitor sshd for connections; self-destruct if none seen for 30s
+touch /tmp/seen
 (while true; do
-  echo user=$USER
+  echo user=$(whoami)
 
-  touch -d '-30 seconds' /tmp/limit
-  ps ax | grep sshd: | grep -v grep && touch /tmp/last
+  touch -d '-30 seconds' /tmp/timeout
+  ps ax | grep -v grep | grep -q sshd: && touch /tmp/seen
 
-  [ /tmp/limit -nt /tmp/last ] && {
-    echo "non-connect limit exceeded";
+  [ /tmp/seen -ot /tmp/timeout ] && {
+    echo "non-connect timeout exceeded";
     kill -9 $(cat $PID_FILE);
+    exit 1
   }
 
   sleep 10

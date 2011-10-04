@@ -19,13 +19,14 @@ run lambda { |env|
   end
 
   # attach route
+  @heroku.route_detach(@app, @r["url"], @r["ps"])
   @heroku.route_attach(@app, @r["url"], @p["process"])
   puts "info: attached route #{@r.inspect} to #{@p["process"]}"
 
   # introspect sshd ps
+  sleep 1
   logs = ""
   @heroku.read_logs(@app) { |chk| logs << chk }
-  puts logs
 
   user = logs.scan(/user=(.*)/).last[0]
   uri = URI.parse(@r["url"])

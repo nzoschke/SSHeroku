@@ -3,6 +3,8 @@
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ETC_DIR=$(dirname $BIN_DIR)/etc/ssh
 
+USER=$(whoami)
+HOST=$(/sbin/ifconfig eth0  | grep 'inet addr:' | cut -d: -f2 | awk '{print $1}')
 PORT=${PORT:-5000}
 PID_FILE=$ETC_DIR/sshd.pid
 
@@ -12,14 +14,15 @@ prefer gtouch touch
 # Monitor sshd for connections; self-destruct if none seen for 30s
 touch /tmp/seen
 (while true; do
-  echo user=$(whoami)
+  PID=$(cat $PID_FILE)
+  echo user=$USER host=$HOST port=$PORT pid=$PID
 
   touch -d '-30 seconds' /tmp/timeout
   ps ax | grep -v grep | grep -q sshd: && touch /tmp/seen
 
   [ /tmp/seen -ot /tmp/timeout ] && {
     echo "non-connect timeout exceeded";
-    kill -9 $(cat $PID_FILE);
+    kill -9 $PID;
     exit 1
   }
 

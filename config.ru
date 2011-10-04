@@ -25,6 +25,7 @@ run lambda { |env|
   # introspect sshd ps
   logs = ""
   @heroku.read_logs(@app) { |chk| logs << chk }
+  puts logs
 
   user = logs.scan(/user=(.*)/).last[0]
   uri = URI.parse(@r["url"])

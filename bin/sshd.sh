@@ -8,7 +8,7 @@ PORT=${PORT:-5000}
 (while true; do
   echo user=$USER
   ps -f
-  sleep 600
+  sleep 10
 done) &
 
 cat <<EOF >$ETC_DIR/sshd_config

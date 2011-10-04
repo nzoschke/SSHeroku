@@ -9,7 +9,7 @@ run lambda { |env|
   # get or create sshd ps
   unless @p = @heroku.ps(@app).detect { |p| p["process"] =~ /sshd/ && p["state"] == "up" }
     @p = @heroku.ps_run(@app, {:command => "sshd", :type => "sshd"})
-    sleep 2
+    sleep 3
     puts "info: created process #{@p.inspect}"
   end
 

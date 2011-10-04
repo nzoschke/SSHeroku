@@ -8,6 +8,7 @@ PORT=${PORT:-5000}
 touch /tmp/last
 (while true; do
   echo user=$USER
+  ps ax
 
   touch -d '-20 seconds' /tmp/limit
   ps ax | grep sshd: | grep -v grep && touch /tmp/last

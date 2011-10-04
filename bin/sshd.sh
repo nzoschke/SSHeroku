@@ -11,7 +11,7 @@ touch /tmp/last
 
   touch -d '-20 seconds' /tmp/limit
   ps ax | grep sshd: | grep -v grep && touch /tmp/last
-  [ /tmp/limit -nt /tmp/last ] && { echo "non-connect limit exceeded"; kill -9 1; }
+  [ /tmp/limit -nt /tmp/last ] && { echo "non-connect limit exceeded"; kill -9 12; } # magic number PID
   sleep 10
 done) &
 

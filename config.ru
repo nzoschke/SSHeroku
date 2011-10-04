@@ -28,7 +28,7 @@ run lambda { |env|
   logs = ""
   @heroku.read_logs(@app) { |chk| logs << chk }
 
-  user = logs.scan(/user=(.*)/).last[0]
+  user = logs.scan(/user=([^ ]+)/).last[0]
   uri = URI.parse(@r["url"])
 
   [200, {"Content-Type" => "text/plain"}, ["-p #{uri.port} #{user}@#{uri.host}"]]

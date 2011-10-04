@@ -3,10 +3,11 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ETC_DIR=$(dirname $BIN_DIR)/etc/ssh
 
 USER=$(whoami)
-HOST=$(/sbin/ifconfig eth0  | grep 'inet addr:' | cut -d: -f2 | awk '{print $1}')
 PORT=${PORT:-5000}
+
 (while true; do
-  echo ssh $USER@$HOST -p $PORT
+  echo user=$USER
+  ps -f
   sleep 600
 done) &
 

@@ -14,7 +14,7 @@ prefer gtouch touch
 # Monitor sshd for connections; self-destruct if none seen for 30s
 touch /tmp/seen
 (while true; do
-  PID=$(cat $PID_FILE)
+  PID=$(cat $PID_FILE || true)
   echo user=$USER host=$HOST port=$PORT pid=$PID
 
   touch -d '-30 seconds' /tmp/timeout

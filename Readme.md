@@ -12,7 +12,7 @@ APP=$(heroku info | head -1 | cut -d" " -f2-2)
 heroku config:add             \
   HEROKU_APP=$APP             \
   HEROKU_PASSWORD=<api_key>   \
-  HEROKU_USERNAME=<username>  \
+  HEROKU_USER=<username>  \
   AUTHORIZED_KEYS="ssh-rsa AAAAB..."
 git push heroku master
 

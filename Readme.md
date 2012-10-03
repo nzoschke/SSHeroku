@@ -7,7 +7,7 @@ Quickstart
 ----------
 
 ```bash
-heroku create -s cedar
+heroku create
 APP=$(heroku info | head -1 | cut -d" " -f2-2)
 heroku config:add             \
   HEROKU_APP=$APP             \

@@ -29,7 +29,7 @@ touch /tmp/beat
   sleep 10
 done) &
 
-echo $AUTHORIZED_KEYS >> $ETC_DIR/authorized_keys
+echo -e $AUTHORIZED_KEYS >> $ETC_DIR/authorized_keys
 
 cat <<EOF >$ETC_DIR/sshd_config
 AllowUsers *

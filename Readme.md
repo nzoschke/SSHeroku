@@ -43,6 +43,39 @@ tar -c . | ssh $(curl -s $APP.herokuapp.com) tar -xv
 ...
 ```
 
+Better Pairing through the Magic of Reverse Tunnels
+---------------------------------------------------
+
+It's easy to set up a reverse tunnel to give others access to your
+machine without fooling around with NAT and port forwarding. Currently
+this needs the `containerized_network` feature flag.
+
+```bash
+heroku sudo flags:add containerized_network -a $APP
+ssh -N -R 2222:localhost:22 $(curl -s $APP.herokuapp.com)
+```
+
+A reverse tunnel is typically used to give others access to a shared
+tmux session running as a guest user.
+
+```bash
+sudo adduser guest
+sudo -u guest -i
+mkdir -p .ssh
+echo -e $AUTHORIZED_KEYS > .ssh/authorized_keys
+curl -L http://git.io/W3PCUw > .tmux.conf # default tmux config is awful
+tmux -2 # do all your shared stuff in here
+```
+
+Once the connection is established, anyone with their key in
+`$AUTHORIZED_KEYS` may connect through the reverse tunnel.
+
+```bash
+ssh $(curl -s $APP.herokuapp.com)
+ssh -p 2222 guest@localhost
+tmux attach
+```
+
 Extra
 -----
 SSH public keys can also be checked into the `etc/ssh/authorized_keys` file.

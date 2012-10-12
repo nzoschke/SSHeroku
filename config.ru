@@ -3,7 +3,8 @@ require "heroku/client"
 require "./lib/heroku/client/routes"
 
 run lambda { |env|
-  @heroku = Heroku::Client.new(ENV["HEROKU_USER"], ENV["HEROKU_PASSWORD"])
+  @heroku = Heroku::Client.new(ENV["HEROKU_USER"], ENV["HEROKU_PASSWORD"], 
+                               ENV["HEROKU_HOST"] || "heroku.com")
   @app    = ENV["HEROKU_APP"]
 
   # get or create sshd ps

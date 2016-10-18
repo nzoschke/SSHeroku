@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This depends on the Heroku TCP router which never left beta. If you'd like tools that make it easy to SSH to instances and to interactively connect to containers for debugging, take a look at [Convox](https://github.com/convox/rack).
+
+https://convox.com/docs/debugging/
+
 SSHeroku
 ========
 
